@@ -16,13 +16,12 @@ namespace Player
         [SerializeField] private float _speed;
         [SerializeField] private Animator _animator;
         private Vector3 _movement;
-        public Vector3 Movement => _movement;
-        public Joystick Joystick;
-        public Rigidbody2D rb;
-        public Button KeyboardControl;
-        public Button JoystickControl;
+        [SerializeField] private Joystick Joystick;
+        [SerializeField] private Rigidbody2D rb;
+        [SerializeField] private Button KeyboardControl;
+        [SerializeField] private Button JoystickControl;
 
-        public ControlType currentControlType;
+        [SerializeField] private ControlType currentControlType;
 
         private void Start()
         {
@@ -36,35 +35,33 @@ namespace Player
             Animation();
             if (currentControlType == ControlType.Keyboard)
             {
-                EnableKeyboard();
+                KeyboardMove();
             }
             else
             {
-                EnableJoystick();
+                JoystickMove();
             }
         }
 
         public void EnableKeyboard()
         {
-            KeyboardMove();
+            currentControlType = ControlType.Keyboard;
         }
 
         public void EnableJoystick()
         {
-            JoystickMove();
+            currentControlType = ControlType.Joystick;
         }
 
 
         private void KeyboardMove()
         {
-            currentControlType = ControlType.Keyboard;
             _movement = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             transform.position += _movement.normalized * (_speed * Time.deltaTime);
         }
 
         private void JoystickMove()
         {
-            currentControlType = ControlType.Joystick;
             _movement = new Vector3(Joystick.Horizontal, Joystick.Vertical);
             transform.position += _movement.normalized * (_speed * Time.deltaTime);
         }
