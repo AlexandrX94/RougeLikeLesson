@@ -26,10 +26,8 @@ namespace Player
 
         private void Start()
         {
-            
-            KeyboardControl.onClick.AddListener(KeyboardMove);
-            JoystickControl.onClick.AddListener(JoystickMove);
-
+            KeyboardControl.onClick.AddListener(EnableKeyboard);
+            JoystickControl.onClick.AddListener(EnableJoystick);
         }
 
        
@@ -38,28 +36,36 @@ namespace Player
             Animation();
             if (currentControlType == ControlType.Keyboard)
             {
-                KeyboardMove();
+                EnableKeyboard();
             }
             else
             {
-                JoystickMove();
+                EnableJoystick();
             }
-            
         }
 
-       
+        public void EnableKeyboard()
+        {
+            KeyboardMove();
+        }
 
-        public void KeyboardMove()
+        public void EnableJoystick()
+        {
+            JoystickMove();
+        }
+
+
+        private void KeyboardMove()
         {
             currentControlType = ControlType.Keyboard;
             _movement = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             transform.position += _movement.normalized * (_speed * Time.deltaTime);
         }
 
-        public void JoystickMove()
+        private void JoystickMove()
         {
             currentControlType = ControlType.Joystick;
-            _movement = new Vector3(Joystick.Horizontal, Joystick.Vertical) * _speed;
+            _movement = new Vector3(Joystick.Horizontal, Joystick.Vertical);
             transform.position += _movement.normalized * (_speed * Time.deltaTime);
         }
 
@@ -72,7 +78,6 @@ namespace Player
 
 
     }
-
 
 }
 
