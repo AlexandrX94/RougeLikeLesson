@@ -29,7 +29,6 @@ namespace Player
             JoystickControl.onClick.AddListener(EnableJoystick);
         }
 
-       
         private void Update()
         {
             Animation();
@@ -53,7 +52,6 @@ namespace Player
             currentControlType = ControlType.Joystick;
         }
 
-
         private void KeyboardMove()
         {
             _movement = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
@@ -72,7 +70,6 @@ namespace Player
             _animator.SetFloat("Vertical", _movement.y);
             _animator.SetFloat("Speed", _movement.sqrMagnitude);
         }
-
 
     }
 
