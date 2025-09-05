@@ -9,8 +9,8 @@ namespace GameCore.Health
         [SerializeField] private float _maxHealth;
         [SerializeField] private float _currentHealth;
 
-        protected float MaxHealth => _maxHealth;
-        protected float CurrentHealth => _currentHealth;
+        public float MaxHealth => _maxHealth;
+        public float CurrentHealth => _currentHealth;
 
         public virtual void TakeDamage(float damage)
         {
