@@ -484,6 +484,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 288138865}
   m_CullTransparentMesh: 1
+--- !u!1 &308459947
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 308459948}
+  - component: {fileID: 308459949}
+  m_Layer: 0
+  m_Name: UI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &308459948
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308459947}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1913064329}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &308459949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308459947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80e6776e979fa29408a0ca49259baa09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerHealthImage: {fileID: 926550548}
 --- !u!1 &317582619
 GameObject:
   m_ObjectHideFlags: 0
@@ -74206,6 +74251,7 @@ GameObject:
   - component: {fileID: 926550547}
   - component: {fileID: 926550549}
   - component: {fileID: 926550548}
+  - component: {fileID: 926550550}
   m_Layer: 5
   m_Name: HPBar
   m_TagString: Untagged
@@ -74270,6 +74316,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 926550546}
   m_CullTransparentMesh: 1
+--- !u!95 &926550550
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926550546}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6da10a7a4ba0ca24da066a43c2262445, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &970293762
 GameObject:
   m_ObjectHideFlags: 0
@@ -75508,6 +75575,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2009740249}
+  - {fileID: 308459948}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1993044129 stripped
@@ -75788,6 +75856,10 @@ PrefabInstance:
     - target: {fileID: 4999270520119754466, guid: 670f5911e7937d447871b7e7e831a3f9, type: 3}
       propertyPath: m_Name
       value: EnemyBee
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830643512397199015, guid: 670f5911e7937d447871b7e7e831a3f9, type: 3}
+      propertyPath: _damage
+      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

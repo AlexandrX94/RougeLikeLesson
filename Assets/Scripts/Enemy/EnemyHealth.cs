@@ -7,28 +7,31 @@ namespace Enemy
 {
     public class EnemyHealth : ObjectHealth
     {
-        private WaitForSeconds _tick = new WaitForSeconds(2f);
+        [SerializeField] private WaitForSeconds _tick = new WaitForSeconds(2f);
 
         private IEnumerator StartBurn(float damage)
         {
             if (gameObject.activeSelf == false)
                 yield break;
-            
+
             float burnDamage = damage / 3f;
 
-            if (burnDamage < 1) 
+            if (burnDamage < 1)
                 burnDamage = 1;
 
             float roundDamage = Mathf.Round(burnDamage);
 
-            for(int i = 0; i < 5; i++)
+            for (int i = 0; i < 5; i++)
             {
                 TakeDamage(roundDamage);
                 yield return _tick;
             }
         }
 
-        public void Burn(float damage) => StartCoroutine(StartBurn(damage));
+        public void Burn(float damage)
+        {
+            StartCoroutine(StartBurn(damage));
+        }
 
         public override void TakeDamage(float damage)
         {

@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace GameCore.Health
@@ -14,6 +15,7 @@ namespace GameCore.Health
 
         public virtual void TakeDamage(float damage)
         {
+            float targetHealth = Mathf.Max(0, _currentHealth - damage);
             if (damage <= 0) { throw new ArgumentOutOfRangeException(nameof(damage)); }
             _currentHealth -= damage;
         }
@@ -34,6 +36,7 @@ namespace GameCore.Health
         }
 
         private void OnEnable() =>  _currentHealth = _maxHealth;
+
         
     }
 
