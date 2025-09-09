@@ -15,7 +15,6 @@ namespace Player
         private WaitForSeconds _burnTick = new WaitForSeconds(2f);
         private float _regenarationValue = 1f;
         private float _burnValue = 5f;
-        private EnemyHealth _enemyHealth;
 
         private IEnumerator Regeneration()
         {
