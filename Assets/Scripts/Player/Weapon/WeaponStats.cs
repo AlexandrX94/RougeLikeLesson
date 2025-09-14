@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Player.Weapon
 {
+    [Serializable]
     public class WeaponStats
     {
         [SerializeField] private float _speed, _damage, _range, _timeBetweenAttack, _duration;

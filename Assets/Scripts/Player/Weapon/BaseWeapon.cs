@@ -45,6 +45,7 @@ namespace Player.Weapon
                 float damage = Random.Range(_damage / 2f, _damage * 2f);
                 enemy.TakeDamage(damage);
             }
+
         }
 
         protected virtual void SetStats(int value) => _damage = _weaponStats[value].Damage;
