@@ -1,6 +1,9 @@
 using GameCore.Health;
+using Player.Weapon;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Enemy
@@ -8,10 +11,11 @@ namespace Enemy
     public class EnemyHealth : ObjectHealth
     {
         [SerializeField] private WaitForSeconds _tick = new WaitForSeconds(2f);
+        private float _enemyDamage;
 
         private IEnumerator StartBurn(float damage)
         {
-            if (gameObject.activeSelf == false)
+           if (gameObject.activeSelf == false)
                 yield break;
 
             float burnDamage = damage / 3f;
@@ -26,6 +30,7 @@ namespace Enemy
                 TakeDamage(roundDamage);
                 yield return _tick;
             }
+            
         }
 
         public void Burn(float damage)
@@ -41,6 +46,7 @@ namespace Enemy
                 gameObject.SetActive(false);
             }
         }
+
     }
 }
 

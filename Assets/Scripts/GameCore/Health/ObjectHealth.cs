@@ -16,7 +16,10 @@ namespace GameCore.Health
         public virtual void TakeDamage(float damage)
         {
             float targetHealth = Mathf.Max(0, _currentHealth - damage);
-            if (damage <= 0) { throw new ArgumentOutOfRangeException(nameof(damage)); }
+            if (damage <= 0) 
+            { 
+                throw new ArgumentOutOfRangeException(nameof(damage)); 
+            }
             _currentHealth -= damage;
         }
 

@@ -1,4 +1,5 @@
 using Player;
+using Player.Weapon;
 using UnityEngine;
 
 namespace Enemy
@@ -14,7 +15,9 @@ namespace Enemy
                 player.TakeDamage(_damage);
                 gameObject.SetActive(false);
             }
+
         }
+        
     }
 
 

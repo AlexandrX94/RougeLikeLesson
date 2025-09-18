@@ -49,7 +49,7 @@ namespace Player
                 StartCoroutine(StartBurn());
             }
         }
-
+       
         public void Heal(float value)
         {
             TakeHeal(value);
