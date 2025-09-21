@@ -59,7 +59,7 @@ namespace Player.Weapon
             _timeBetweenAttack = new WaitForSeconds(WeaponStats[CurrentLevel - 1].TimeBetweenAttack);
             _range = WeaponStats[CurrentLevel - 1].Range;
             _targetContainer.transform.localScale = Vector3.one * _range;
-            _circleCollider.radius = _range / 25f;
+            _circleCollider.radius = 5f;
             _circleCollider.isTrigger = true;
             Debug.Log($"AuraWeapon: Damage = {_damage}, Range = {_range}, Collider Radius = {(_circleCollider != null ? _circleCollider.radius.ToString() : "null")}");
         }
