@@ -1,6 +1,7 @@
 using Player;
 using Player.Weapon;
 using UnityEngine;
+using Enemy;
 
 namespace Enemy
 {
@@ -19,6 +20,5 @@ namespace Enemy
         }
         
     }
-
 
 }

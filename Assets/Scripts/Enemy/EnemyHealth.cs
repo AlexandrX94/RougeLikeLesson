@@ -5,13 +5,16 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Enemy;
+using System.Diagnostics;
+using Zenject;
 
 namespace Enemy
 {
     public class EnemyHealth : ObjectHealth
     {
         [SerializeField] private WaitForSeconds _tick = new WaitForSeconds(2f);
-        private float _enemyDamage;
+        [SerializeField] private float _enemyDamage;
 
         private IEnumerator StartBurn(float damage)
         {
@@ -32,10 +35,9 @@ namespace Enemy
             }
             
         }
-
         public void Burn(float damage)
         {
-            StartCoroutine(StartBurn(damage));
+            StartCoroutine(StartBurn(2f));
         }
 
         public override void TakeDamage(float damage)

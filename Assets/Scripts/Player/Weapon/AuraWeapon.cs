@@ -18,23 +18,30 @@ namespace Player.Weapon
         protected override void Start()
         {
             base.Start();
+
             SetStats(0);
             Activate();
         }
 
         protected override void OnTriggerEnter2D(Collider2D other)
         {
-            Debug.Log("AuraWeapon Trigger entered by: " + other.gameObject.name);
+            Debug.Log($"AuraWeapon Trigger entered by: {other.gameObject.name}, Layer: {LayerMask.LayerToName(other.gameObject.layer)}");
             if (other.gameObject.TryGetComponent(out EnemyHealth enemy))
             {
-                _enemiesInZone.Add(enemy);
-                Debug.Log("Enemy added to _enemiesInZone: " + enemy.gameObject.name);
+                if (!_enemiesInZone.Contains(enemy))
+                {
+                    _enemiesInZone.Add(enemy);
+                    Debug.Log($"Enemy ADDED to _enemiesInZone: {enemy.gameObject.name}, Health: {enemy.CurrentHealth}");
+                }
             }
             else
             {
-                Debug.Log("No EnemyHealth component on: " + other.gameObject.name);
+                Debug.Log($"No EnemyHealth component on: {other.gameObject.name}");
+                if (other.gameObject.TryGetComponent(out EnemyCollision enemyCollision))
+                {
+                    Debug.Log($"EnemyCollision FOUND on: {other.gameObject.name}");
+                }
             }
-
         }
 
         private void OnTriggerExit2D(Collider2D other)
@@ -42,6 +49,7 @@ namespace Player.Weapon
             if (other.gameObject.TryGetComponent(out EnemyHealth enemy))
             {
                 _enemiesInZone.Remove(enemy);
+                Debug.Log($"Enemy REMOVED from _enemiesInZone: {enemy.gameObject.name}");
             }
         }
 
@@ -51,17 +59,24 @@ namespace Player.Weapon
             _timeBetweenAttack = new WaitForSeconds(WeaponStats[CurrentLevel - 1].TimeBetweenAttack);
             _range = WeaponStats[CurrentLevel - 1].Range;
             _targetContainer.transform.localScale = Vector3.one * _range;
-            //_circleCollider.radius = _range / 3f;
+            _circleCollider.radius = _range / 25f;
+            _circleCollider.isTrigger = true;
+            Debug.Log($"AuraWeapon: Damage = {_damage}, Range = {_range}, Collider Radius = {(_circleCollider != null ? _circleCollider.radius.ToString() : "null")}");
         }
 
         private IEnumerator CheckZone()
         {
-            while(enabled)
+            while (enabled)
             {
+                Debug.Log($"CheckZone: Enemies in zone = {_enemiesInZone.Count}");
                 for (int i = 0; i < _enemiesInZone.Count; i++)
                 {
-                    _enemiesInZone[i].TakeDamage(_damage);
-
+                    if (_enemiesInZone[i] != null)
+                    {
+                        Debug.Log($"Dealing {_damage} damage to {_enemiesInZone[i].gameObject.name}");
+                        _enemiesInZone[i].TakeDamage(_damage);
+                        // Или используйте Burn: _enemiesInZone[i].Burn(_damage);
+                    }
                 }
                 yield return _timeBetweenAttack;
             }

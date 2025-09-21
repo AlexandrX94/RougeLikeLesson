@@ -60,20 +60,24 @@ namespace Player.Weapon
                 _targetContainer1X.gameObject.SetActive(true);
                 _targetContainer2X.gameObject.SetActive(false);
                 _transformSprite1X.localPosition = new Vector3(_range, 0, 0);
-               // _collider1X.offset = new Vector2(_range, 0);
+
+                //_collider1X.offset = new Vector2(_range, 0);
+                _collider1X.isTrigger = true;
 
             }
             else
             {
                 _targetContainer1X.gameObject.SetActive(false);
                 _targetContainer2X.gameObject.SetActive(true);
+
                 for (int i = 0; i < _colleder2X.Count; i++)
                 {
                     _colleder2X[i].gameObject.SetActive(true);
+                    _colleder2X[i].isTrigger = true;
                 }
                 _transformSprite2X[0].localPosition = new Vector2(_range, 0);
                 _transformSprite2X[1].localPosition = new Vector2(-_range, 0);
-               // _colleder2X[0].offset = new Vector2(_range, 0);
+                //_colleder2X[0].offset = new Vector2(_range, 0);
                 //_colleder2X[1].offset = new Vector2(-_range, 0);
             }
 
