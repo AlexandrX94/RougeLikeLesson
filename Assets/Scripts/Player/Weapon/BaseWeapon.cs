@@ -37,6 +37,12 @@ namespace Player.Weapon
             SetStats(0);
         }
 
+        // добавлено
+        public float GetCurrentDamage()
+        {
+            return _damage;
+        }
+
         public virtual void LevelUp()
         {
             if (_currentLevel < _maxLevel)
@@ -47,12 +53,12 @@ namespace Player.Weapon
         }
         protected virtual void OnTriggerEnter2D(Collider2D other)
         {
-            /*if (other.gameObject.TryGetComponent(out EnemyHealth enemy))
+            if (other.gameObject.TryGetComponent(out EnemyHealth enemy))
             {
                 float damage = Random.Range(_damage / 2f, _damage * 2f);
                 enemy.TakeDamage(damage);
             }
-            */
+            
         }
        
         protected virtual void SetStats(int value)
@@ -60,11 +66,6 @@ namespace Player.Weapon
             if (_weaponStats != null && _weaponStats.Count > value && _weaponStats[value] != null)
             {
                 _damage = _weaponStats[value].Damage;
-                UnityEngine.Debug.Log($"BaseWeapon: Damage set to {_damage}, Level: {_currentLevel}");
-            }
-            else
-            {
-                UnityEngine.Debug.LogError($"WeaponStats is invalid! Index: {value}, Count: {_weaponStats?.Count}");
             }
         }
 

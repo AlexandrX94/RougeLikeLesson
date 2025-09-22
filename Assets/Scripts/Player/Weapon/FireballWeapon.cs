@@ -63,6 +63,8 @@ namespace Player.Weapon
 
                 //_collider1X.offset = new Vector2(_range, 0);
                 _collider1X.isTrigger = true;
+                // добавлено
+                EnsureHitbox(_collider1X);
 
             }
             else
@@ -74,6 +76,8 @@ namespace Player.Weapon
                 {
                     _colleder2X[i].gameObject.SetActive(true);
                     _colleder2X[i].isTrigger = true;
+                    // добавлено
+                    EnsureHitbox(_colleder2X[i]);
                 }
                 _transformSprite2X[0].localPosition = new Vector2(_range, 0);
                 _transformSprite2X[1].localPosition = new Vector2(-_range, 0);
@@ -81,6 +85,20 @@ namespace Player.Weapon
                 //_colleder2X[1].offset = new Vector2(-_range, 0);
             }
 
+        }
+
+        // добавлено
+        private void EnsureHitbox(Collider2D collider)
+        {
+            if (collider == null)
+                return;
+
+            var hitbox = collider.GetComponent<WeaponHitbox>();
+            if (hitbox == null)
+            {
+                hitbox = collider.gameObject.AddComponent<WeaponHitbox>();
+            }
+            hitbox.SetOwner(this);
         }
 
         private IEnumerator WeaponLifeCycle()

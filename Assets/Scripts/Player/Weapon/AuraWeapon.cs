@@ -25,31 +25,30 @@ namespace Player.Weapon
 
         protected override void OnTriggerEnter2D(Collider2D other)
         {
-            Debug.Log($"AuraWeapon Trigger entered by: {other.gameObject.name}, Layer: {LayerMask.LayerToName(other.gameObject.layer)}");
-            if (other.gameObject.TryGetComponent(out EnemyHealth enemy))
+            var enemy = other.GetComponentInParent<EnemyHealth>();
+            if (enemy != null)
             {
                 if (!_enemiesInZone.Contains(enemy))
                 {
                     _enemiesInZone.Add(enemy);
-                    Debug.Log($"Enemy ADDED to _enemiesInZone: {enemy.gameObject.name}, Health: {enemy.CurrentHealth}");
                 }
+                return;
             }
-            else
-            {
-                Debug.Log($"No EnemyHealth component on: {other.gameObject.name}");
-                if (other.gameObject.TryGetComponent(out EnemyCollision enemyCollision))
-                {
-                    Debug.Log($"EnemyCollision FOUND on: {other.gameObject.name}");
-                }
-            }
+
+        }
+
+        private void OnTriggerStay2D(Collider2D other)
+        {
+            var enemy = other.GetComponentInParent<EnemyHealth>();
+            if (enemy != null && !_enemiesInZone.Contains(enemy)) _enemiesInZone.Add(enemy);
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (other.gameObject.TryGetComponent(out EnemyHealth enemy))
+            var enemy = other.GetComponentInParent<EnemyHealth>();
+            if (enemy != null)
             {
                 _enemiesInZone.Remove(enemy);
-                Debug.Log($"Enemy REMOVED from _enemiesInZone: {enemy.gameObject.name}");
             }
         }
 
@@ -59,23 +58,21 @@ namespace Player.Weapon
             _timeBetweenAttack = new WaitForSeconds(WeaponStats[CurrentLevel - 1].TimeBetweenAttack);
             _range = WeaponStats[CurrentLevel - 1].Range;
             _targetContainer.transform.localScale = Vector3.one * _range;
-            _circleCollider.radius = 5f;
+            _circleCollider.radius = _range;
             _circleCollider.isTrigger = true;
-            Debug.Log($"AuraWeapon: Damage = {_damage}, Range = {_range}, Collider Radius = {(_circleCollider != null ? _circleCollider.radius.ToString() : "null")}");
+            // добавлено
+            EnsureHitbox(_circleCollider);
         }
 
         private IEnumerator CheckZone()
         {
             while (enabled)
             {
-                Debug.Log($"CheckZone: Enemies in zone = {_enemiesInZone.Count}");
                 for (int i = 0; i < _enemiesInZone.Count; i++)
                 {
                     if (_enemiesInZone[i] != null)
                     {
-                        Debug.Log($"Dealing {_damage} damage to {_enemiesInZone[i].gameObject.name}");
                         _enemiesInZone[i].TakeDamage(_damage);
-                        // ��� ����������� Burn: _enemiesInZone[i].Burn(_damage);
                     }
                 }
                 yield return _timeBetweenAttack;
@@ -85,6 +82,8 @@ namespace Player.Weapon
         public void Activate()
         {
             SetStats(0);
+            // добавлено
+            PopulateEnemiesAlreadyInZone();
             _auraCoroutine = StartCoroutine(CheckZone());
         }
 
@@ -95,6 +94,38 @@ namespace Player.Weapon
                 StopCoroutine(_auraCoroutine);
             }
                 
+        }
+
+        // добавлено
+        private void PopulateEnemiesAlreadyInZone()
+        {
+            if (_circleCollider == null)
+                return;
+
+            var results = new Collider2D[32];
+            int count = _circleCollider.OverlapCollider(new ContactFilter2D { useTriggers = true, useLayerMask = false }, results);
+            for (int i = 0; i < count && i < results.Length; i++)
+            {
+                var enemy = results[i]?.GetComponentInParent<EnemyHealth>();
+                if (enemy != null && !_enemiesInZone.Contains(enemy))
+                {
+                    _enemiesInZone.Add(enemy);
+                }
+            }
+        }
+
+        // добавлено
+        private void EnsureHitbox(Collider2D collider)
+        {
+            if (collider == null)
+                return;
+
+            var hitbox = collider.GetComponent<WeaponHitbox>();
+            if (hitbox == null)
+            {
+                hitbox = collider.gameObject.AddComponent<WeaponHitbox>();
+            }
+            hitbox.SetOwner(this);
         }
     }
 }

@@ -44,6 +44,10 @@ namespace Player
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            // Ignore trigger-only colliders (like enemy hurtboxes or our own auras) to avoid self-damage on weapon overlap
+            if (collision.isTrigger)
+                return;
+
             if (collision.gameObject.TryGetComponent(out EnemyCollision enemyCollision))
             {
                 StartCoroutine(StartBurn());
@@ -63,7 +67,7 @@ namespace Player
 
             if (CurrentHealth <= 0)
             {
-                Debug.Log("Игрок умер");
+                Debug.Log("пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ");
             }
 
         }
