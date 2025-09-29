@@ -20,6 +20,13 @@ namespace Player.Weapon
         [SerializeField] private List<Collider2D> _colleder2X = new List<Collider2D>();
         [SerializeField] private List<Transform> _transformSprite2X = new List<Transform>();
         [SerializeField] private Transform _targetContainer2X;
+        
+
+        [Header("Triple")]
+        [SerializeField] private List<SpriteRenderer> _spriteRenderer3X = new List<SpriteRenderer>();
+        [SerializeField] private List<Collider2D> _colleder3X = new List<Collider2D>();
+        [SerializeField] private List<Transform> _transformSprite3X = new List<Transform>();
+        [SerializeField] private Transform _targetContainer3X;
 
         private WaitForSeconds _duration, _interval, _timeBetweenAtack;
         private float _rotationSpeed, _range;
@@ -59,6 +66,7 @@ namespace Player.Weapon
             {
                 _targetContainer1X.gameObject.SetActive(true);
                 _targetContainer2X.gameObject.SetActive(false);
+                _targetContainer3X.gameObject.SetActive(false);
                 _transformSprite1X.localPosition = new Vector3(_range, 0, 0);
 
                 //_collider1X.offset = new Vector2(_range, 0);
@@ -67,10 +75,11 @@ namespace Player.Weapon
                 EnsureHitbox(_collider1X);
 
             }
-            else
+            else if(CurrentLevel < 6)
             {
                 _targetContainer1X.gameObject.SetActive(false);
                 _targetContainer2X.gameObject.SetActive(true);
+                _targetContainer3X.gameObject.SetActive(false);
 
                 for (int i = 0; i < _colleder2X.Count; i++)
                 {
@@ -83,6 +92,30 @@ namespace Player.Weapon
                 _transformSprite2X[1].localPosition = new Vector2(-_range, 0);
                 //_colleder2X[0].offset = new Vector2(_range, 0);
                 //_colleder2X[1].offset = new Vector2(-_range, 0);
+            }
+            else
+            {
+                _targetContainer1X.gameObject.SetActive(false);
+                _targetContainer2X.gameObject.SetActive(false);
+                _targetContainer3X.gameObject.SetActive(true);
+
+                for (int i = 0; i < _colleder3X.Count; i++)
+                {
+                    _colleder3X[i].gameObject.SetActive(true);
+                    _colleder3X[i].isTrigger = true;
+                    // добавлено
+                    EnsureHitbox(_colleder3X[i]);
+                }
+                for (int i = 0; i < _transformSprite3X.Count; i++)
+                {
+                    float angle = i * 2 * Mathf.PI / 3; 
+                    _transformSprite3X[i].localPosition = new Vector3(_range * Mathf.Cos(angle), _range * Mathf.Sin(angle), 0);
+                }
+                /*
+                _transformSprite3X[0].localPosition = new Vector2(_range, -1);
+                _transformSprite3X[1].localPosition = new Vector2(_range, 0);
+                _transformSprite3X[2].localPosition = new Vector2(-_range, 0);
+                */
             }
 
         }
@@ -110,7 +143,7 @@ namespace Player.Weapon
                     _spriteRenderer1X.enabled = !_spriteRenderer1X.enabled;
                     _collider1X.enabled = !_collider1X.enabled;
                 }
-                else
+                else if (CurrentLevel < 6) 
                 {
                     for (int i = 0; i < _spriteRenderer2X.Count; i++)
                     {
@@ -118,8 +151,16 @@ namespace Player.Weapon
                         _colleder2X[i].enabled = !_colleder2X[i].enabled;
                     }
                 }
+                else
+                {
+                    for (int i = 0; i < _spriteRenderer3X.Count; i++)
+                    {
+                        _spriteRenderer3X[i].enabled = !_spriteRenderer3X[i].enabled;
+                        _colleder3X[i].enabled = !_colleder3X[i].enabled;
+                    }
+                }
 
-                _interval = _spriteRenderer1X.enabled || _spriteRenderer2X[0].enabled ? _duration : _timeBetweenAtack;
+                _interval = _spriteRenderer1X.enabled || _spriteRenderer2X[0].enabled || _spriteRenderer3X[0].enabled ? _duration : _timeBetweenAtack;
                 yield return _interval;
             }
 

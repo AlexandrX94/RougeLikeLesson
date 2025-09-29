@@ -18,12 +18,11 @@ namespace Player.Weapon
         protected override void Start()
         {
             base.Start();
-
             SetStats(0);
             Activate();
         }
 
-        protected override void OnTriggerEnter2D(Collider2D other)
+        private void OnTriggerEnter(Collider other)
         {
             var enemy = other.GetComponentInParent<EnemyHealth>();
             if (enemy != null)
@@ -34,23 +33,25 @@ namespace Player.Weapon
                 }
                 return;
             }
-
         }
 
-        private void OnTriggerStay2D(Collider2D other)
+        private void OnTriggerExit(Collider other)
         {
             var enemy = other.GetComponentInParent<EnemyHealth>();
-            if (enemy != null && !_enemiesInZone.Contains(enemy)) _enemiesInZone.Add(enemy);
+            _enemiesInZone.Remove(enemy);
+            
         }
 
-        private void OnTriggerExit2D(Collider2D other)
+        private void OnTriggerStay(Collider other)
         {
             var enemy = other.GetComponentInParent<EnemyHealth>();
-            if (enemy != null)
+            for (int i = 0; i < _enemiesInZone.Count; i++)
             {
-                _enemiesInZone.Remove(enemy);
+                _enemiesInZone[i].TakeDamage(Damage);
             }
         }
+
+
 
         protected override void SetStats(int value)
         {
@@ -58,10 +59,8 @@ namespace Player.Weapon
             _timeBetweenAttack = new WaitForSeconds(WeaponStats[CurrentLevel - 1].TimeBetweenAttack);
             _range = WeaponStats[CurrentLevel - 1].Range;
             _targetContainer.transform.localScale = Vector3.one * _range;
-            _circleCollider.radius = _range;
+            _circleCollider.radius = _range / 4.5f;
             _circleCollider.isTrigger = true;
-            // добавлено
-            EnsureHitbox(_circleCollider);
         }
 
         private IEnumerator CheckZone()
@@ -70,10 +69,7 @@ namespace Player.Weapon
             {
                 for (int i = 0; i < _enemiesInZone.Count; i++)
                 {
-                    if (_enemiesInZone[i] != null)
-                    {
-                        _enemiesInZone[i].TakeDamage(_damage);
-                    }
+                    _enemiesInZone[i].TakeDamage(Damage);
                 }
                 yield return _timeBetweenAttack;
             }
@@ -82,8 +78,6 @@ namespace Player.Weapon
         public void Activate()
         {
             SetStats(0);
-            // добавлено
-            PopulateEnemiesAlreadyInZone();
             _auraCoroutine = StartCoroutine(CheckZone());
         }
 
@@ -96,37 +90,6 @@ namespace Player.Weapon
                 
         }
 
-        // добавлено
-        private void PopulateEnemiesAlreadyInZone()
-        {
-            if (_circleCollider == null)
-                return;
-
-            var results = new Collider2D[32];
-            int count = _circleCollider.OverlapCollider(new ContactFilter2D { useTriggers = true, useLayerMask = false }, results);
-            for (int i = 0; i < count && i < results.Length; i++)
-            {
-                var enemy = results[i]?.GetComponentInParent<EnemyHealth>();
-                if (enemy != null && !_enemiesInZone.Contains(enemy))
-                {
-                    _enemiesInZone.Add(enemy);
-                }
-            }
-        }
-
-        // добавлено
-        private void EnsureHitbox(Collider2D collider)
-        {
-            if (collider == null)
-                return;
-
-            var hitbox = collider.GetComponent<WeaponHitbox>();
-            if (hitbox == null)
-            {
-                hitbox = collider.gameObject.AddComponent<WeaponHitbox>();
-            }
-            hitbox.SetOwner(this);
-        }
     }
 }
 

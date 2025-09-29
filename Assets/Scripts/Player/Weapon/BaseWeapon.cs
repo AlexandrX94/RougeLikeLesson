@@ -12,7 +12,7 @@ namespace Player.Weapon
     public abstract class BaseWeapon : MonoBehaviour
     {
         [SerializeField] private List<WeaponStats> _weaponStats = new List<WeaponStats>();
-        protected float _damage;
+        private float _damage;
         private DiContainer _diContainer;
         private int _currentLevel = 1;
         private int _maxLevel = 8;
