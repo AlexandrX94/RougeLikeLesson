@@ -3,37 +3,90 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
+using Player.Weapon;
+using System;
 
 public class EnemyMovement : MonoBehaviour
 {
-    [SerializeField] float _speed;
+    [SerializeField] protected float _speed;
     [SerializeField] float _freezeTimer;
     [SerializeField] private Animator _animator;
     private Vector3 _direction;
     private PlayerMovement _playerTransform;
     private WaitForSeconds _checkTime = new WaitForSeconds(3f);
     private Coroutine _distanceToHide;
+    private float _slowSpeed;
+    private AuraWeapon _auraWeapon; 
+    private float _originalSpeed; 
+    private bool _isSlowed; 
+
+    public event Action ChangeSpeed;
 
      [Inject] private void Construct(PlayerMovement playerTransform)
-    {
-        _playerTransform = playerTransform;
-    }
+     {
+         _playerTransform = playerTransform;
+     }
     
     private void OnEnable()
     {
+        _originalSpeed = _speed; 
+        _isSlowed = false; 
         _distanceToHide = StartCoroutine(CheckDistanceToHide());
+        ChangeSpeed += OnChangeSpeed; 
+    }
+    private void OnDisable()
+    {
+        ChangeSpeed -= OnChangeSpeed; 
+        if (_distanceToHide != null)
+        {
+            StopCoroutine(_distanceToHide);
+        }
     }
 
     private void Update()
     {
         EnemyAnimation();
         EnemyMove();
+
+        
     }
 
-    private void EnemyMove()
+    public void EnemyMove()
     {
         _direction = (_playerTransform.transform.position - transform.position).normalized;
         transform.position += _direction * (_speed * Time.deltaTime);
+    }
+
+        
+    public void SlowMove(float slowFactor = 0.5f)
+    {
+        if (!_isSlowed)
+        {
+            _speed = _originalSpeed * slowFactor; 
+            _isSlowed = true;
+        }
+    }
+
+    public void RestoreSpeed()
+    {
+        if (_isSlowed)
+        {
+            _speed = _originalSpeed; 
+            _isSlowed = false;
+        }
+    }
+
+    private void OnChangeSpeed()
+    {
+        
+        if (_isSlowed)
+        {
+            RestoreSpeed();
+        }
+        else
+        {
+            SlowMove();
+        }
     }
 
     private void EnemyAnimation()

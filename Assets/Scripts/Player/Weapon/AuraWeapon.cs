@@ -2,6 +2,7 @@ using Enemy;
 using GameCore;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Player.Weapon
@@ -14,62 +15,89 @@ namespace Player.Weapon
         private WaitForSeconds _timeBetweenAttack;
         private Coroutine _auraCoroutine;
         private float _range;
+        private List<EnemyMovement> _enemyMovements = new List<EnemyMovement>();
 
         protected override void Start()
         {
             base.Start();
+            LevelUp();
+            LevelUp();
+            LevelUp();
+            LevelUp();
+            LevelUp();
             SetStats(0);
             Activate();
         }
 
-        private void OnTriggerEnter(Collider other)
+        protected override void OnTriggerEnter2D(Collider2D other)
         {
-            var enemy = other.GetComponentInParent<EnemyHealth>();
-            if (enemy != null)
+            var enemy = other.GetComponent<EnemyHealth>();
+            if (enemy != null && !_enemiesInZone.Contains(enemy))
             {
-                if (!_enemiesInZone.Contains(enemy))
+                _enemiesInZone.Add(enemy);
+
+                var enemyMovement = other.GetComponent<EnemyMovement>();
+                if (enemyMovement != null && CurrentLevel >= 5)
                 {
-                    _enemiesInZone.Add(enemy);
+                    _enemyMovements.Add(enemyMovement);
+                    enemyMovement.SlowMove(0.5f); 
                 }
-                return;
             }
         }
 
-        private void OnTriggerExit(Collider other)
+        private void OnTriggerExit2D(Collider2D other)
         {
-            var enemy = other.GetComponentInParent<EnemyHealth>();
-            _enemiesInZone.Remove(enemy);
-            
-        }
-
-        private void OnTriggerStay(Collider other)
-        {
-            var enemy = other.GetComponentInParent<EnemyHealth>();
-            for (int i = 0; i < _enemiesInZone.Count; i++)
+            var enemy = other.GetComponent<EnemyHealth>();
+            if (enemy != null && _enemiesInZone.Contains(enemy))
             {
-                _enemiesInZone[i].TakeDamage(Damage);
+                _enemiesInZone.Remove(enemy);
+                var enemyMovement = other.GetComponent<EnemyMovement>();
+                if (enemyMovement != null && _enemyMovements.Contains(enemyMovement))
+                {
+                    _enemyMovements.Remove(enemyMovement);
+                    enemyMovement.RestoreSpeed(); 
+                }
             }
         }
 
-
-
+        
         protected override void SetStats(int value)
         {
             base.SetStats(value);
+
+            if (_damage <= 0f)  
+            {
+                if (WeaponStats != null && WeaponStats.Count > value && WeaponStats[value] != null)
+                {
+                    _damage = WeaponStats[value].Damage;  
+                }
+            }
+
             _timeBetweenAttack = new WaitForSeconds(WeaponStats[CurrentLevel - 1].TimeBetweenAttack);
             _range = WeaponStats[CurrentLevel - 1].Range;
-            _targetContainer.transform.localScale = Vector3.one * _range;
-            _circleCollider.radius = _range / 4.5f;
-            _circleCollider.isTrigger = true;
+
+            if (_targetContainer != null)
+            {
+                _targetContainer.localScale = Vector3.one * _range;
+            }
+            if (_circleCollider != null)
+            {
+                _circleCollider.radius = _range / 4.5f;
+                _circleCollider.isTrigger = true;
+            }
+
         }
+        
 
         private IEnumerator CheckZone()
         {
             while (enabled)
             {
-                for (int i = 0; i < _enemiesInZone.Count; i++)
+                int hitCount = 0;
+                for (int i = _enemiesInZone.Count - 1; i >= 0; i--)
                 {
                     _enemiesInZone[i].TakeDamage(Damage);
+                    hitCount++;
                 }
                 yield return _timeBetweenAttack;
             }
@@ -86,6 +114,7 @@ namespace Player.Weapon
             if (_auraCoroutine != null)
             { 
                 StopCoroutine(_auraCoroutine);
+                _auraCoroutine = null;
             }
                 
         }

@@ -15,39 +15,39 @@ namespace Enemy
     {
         [SerializeField] private WaitForSeconds _tick = new WaitForSeconds(2f);
         [SerializeField] private float _enemyDamage;
+        [SerializeField] private AudioSource _audioSource;
 
-        private IEnumerator StartBurn(float damage)
+        private IEnumerator StartBurn(float damage) 
         {
-           if (gameObject.activeSelf == false)
+            if (gameObject.activeSelf == false || damage <= 0)
                 yield break;
 
             float burnDamage = damage / 3f;
-
-            if (burnDamage < 1)
-                burnDamage = 1;
-
+            if (burnDamage < 1) burnDamage = 1;
             float roundDamage = Mathf.Round(burnDamage);
 
             for (int i = 0; i < 5; i++)
             {
-                TakeDamage(roundDamage);
+                TakeDamage(roundDamage); 
                 yield return _tick;
             }
-            
         }
+
         public void Burn(float damage)
         {
-            StartCoroutine(StartBurn(2f));
+            StartCoroutine(StartBurn(damage));
         }
 
         public override void TakeDamage(float damage)
         {
             base.TakeDamage(damage);
+            _audioSource.Play();
             if (CurrentHealth <= 0)
             {
                 gameObject.SetActive(false);
             }
         }
+
 
     }
 }

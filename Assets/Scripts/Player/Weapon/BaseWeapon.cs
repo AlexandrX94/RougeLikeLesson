@@ -12,7 +12,8 @@ namespace Player.Weapon
     public abstract class BaseWeapon : MonoBehaviour
     {
         [SerializeField] private List<WeaponStats> _weaponStats = new List<WeaponStats>();
-        private float _damage;
+        //c!!!!
+        protected float _damage;
         private DiContainer _diContainer;
         private int _currentLevel = 1;
         private int _maxLevel = 8;
@@ -53,12 +54,17 @@ namespace Player.Weapon
         }
         protected virtual void OnTriggerEnter2D(Collider2D other)
         {
+            if (this is AuraWeapon)
+            {
+                return; 
+            }
+
+
             if (other.gameObject.TryGetComponent(out EnemyHealth enemy))
             {
                 float damage = Random.Range(_damage / 2f, _damage * 2f);
                 enemy.TakeDamage(damage);
             }
-            
         }
        
         protected virtual void SetStats(int value)

@@ -17,8 +17,12 @@ namespace GameCore.Health
         {
             float targetHealth = Mathf.Max(0, _currentHealth - damage);
             if (damage <= 0) 
-            { 
-                throw new ArgumentOutOfRangeException(nameof(damage)); 
+            {
+                // <-- Улучшенный warning с стектрейсом (Unity покажет в Console полный вызов)
+                Debug.LogWarning($"Invalid damage: {damage} on {gameObject.name} (HP: {_currentHealth}). Called from: {new System.Diagnostics.StackTrace().ToString().Split('\n')[1]}");
+                return; // <-- Не throw, чтобы не крашить
+
+                //throw new ArgumentOutOfRangeException(nameof(damage)); 
             }
             _currentHealth -= damage;
         }
