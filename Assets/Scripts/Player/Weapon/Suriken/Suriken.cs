@@ -14,7 +14,7 @@ namespace Player.Weapon.Suriken
         {
             base.OnEnable();
             Timer = new WaitForSeconds(_surikenWeapon.Duration);
-            Damage = _surikenWeapon.Damage;
+            Damage = _surikenWeapon._Damage;
         }
 
         private void Update()

@@ -12,15 +12,15 @@ namespace Player.Weapon
     public abstract class BaseWeapon : MonoBehaviour
     {
         [SerializeField] private List<WeaponStats> _weaponStats = new List<WeaponStats>();
-        //c!!!!
-        protected float _damage;
+        
+        protected float Damage;
         private DiContainer _diContainer;
         private int _currentLevel = 1;
         private int _maxLevel = 8;
         public List<WeaponStats> WeaponStats => _weaponStats;
         public int CurrentLevel => _currentLevel;
         public int MaxLevel => _maxLevel;
-        public float Damage => _damage;
+        public float _Damage => Damage;
 
 
         [Inject] private void Construct(DiContainer diContainer)
@@ -41,7 +41,7 @@ namespace Player.Weapon
         // добавлено
         public float GetCurrentDamage()
         {
-            return _damage;
+            return Damage;
         }
 
         public virtual void LevelUp()
@@ -62,7 +62,7 @@ namespace Player.Weapon
 
             if (other.gameObject.TryGetComponent(out EnemyHealth enemy))
             {
-                float damage = Random.Range(_damage / 2f, _damage * 2f);
+                float damage = Random.Range(Damage / 2f, Damage * 2f);
                 enemy.TakeDamage(damage);
             }
         }
@@ -71,7 +71,7 @@ namespace Player.Weapon
         {
             if (_weaponStats != null && _weaponStats.Count > value && _weaponStats[value] != null)
             {
-                _damage = _weaponStats[value].Damage;
+                Damage = _weaponStats[value].Damage;
             }
         }
 

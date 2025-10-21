@@ -8,7 +8,7 @@ using System;
 
 public class EnemyMovement : MonoBehaviour
 {
-    [SerializeField] protected float _speed;
+    [SerializeField] protected float Speed;
     [SerializeField] float _freezeTimer;
     [SerializeField] private Animator _animator;
     private Vector3 _direction;
@@ -29,7 +29,7 @@ public class EnemyMovement : MonoBehaviour
     
     private void OnEnable()
     {
-        _originalSpeed = _speed; 
+        _originalSpeed = Speed; 
         _isSlowed = false; 
         _distanceToHide = StartCoroutine(CheckDistanceToHide());
         ChangeSpeed += OnChangeSpeed; 
@@ -54,7 +54,7 @@ public class EnemyMovement : MonoBehaviour
     public void EnemyMove()
     {
         _direction = (_playerTransform.transform.position - transform.position).normalized;
-        transform.position += _direction * (_speed * Time.deltaTime);
+        transform.position += _direction * (Speed * Time.deltaTime);
     }
 
         
@@ -62,7 +62,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (!_isSlowed)
         {
-            _speed = _originalSpeed * slowFactor; 
+            Speed = _originalSpeed * slowFactor; 
             _isSlowed = true;
         }
     }
@@ -71,7 +71,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (_isSlowed)
         {
-            _speed = _originalSpeed; 
+            Speed = _originalSpeed; 
             _isSlowed = false;
         }
     }

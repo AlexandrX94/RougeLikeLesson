@@ -65,11 +65,11 @@ namespace Player.Weapon
         {
             base.SetStats(value);
 
-            if (_damage <= 0f)  
+            if (Damage <= 0f)  
             {
                 if (WeaponStats != null && WeaponStats.Count > value && WeaponStats[value] != null)
                 {
-                    _damage = WeaponStats[value].Damage;  
+                    Damage = WeaponStats[value].Damage;  
                 }
             }
 
