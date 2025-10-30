@@ -473,7 +473,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &165878226
 Transform:
   m_ObjectHideFlags: 0
@@ -68375,6 +68375,72 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &320533462
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 320533463}
+  - component: {fileID: 320533465}
+  - component: {fileID: 320533464}
+  m_Layer: 6
+  m_Name: TrapWeapon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &320533463
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320533462}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 773892327}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &320533464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320533462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b8a92a4da4cc5f4ba24f12d846dd480, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prefab: {fileID: 4035009013046831439, guid: c91833b502d247b49bb7b6d427d7ba12, type: 3}
+--- !u!114 &320533465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320533462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 251c3501268c7af449d5a6aeb14c492e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _weaponStats:
+  - _speed: 0
+    _damage: 5
+    _range: 0
+    _timeBetweenAttack: 1
+    _duration: 0
+  _objectPool: {fileID: 320533464}
+  _container: {fileID: 1369825711}
 --- !u!1 &435836673
 GameObject:
   m_ObjectHideFlags: 0
@@ -74861,6 +74927,7 @@ Transform:
   - {fileID: 130368087}
   - {fileID: 1203187967}
   - {fileID: 165878226}
+  - {fileID: 320533463}
   m_Father: {fileID: 1083680926}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &780055437
@@ -77632,6 +77699,7 @@ MonoBehaviour:
   _playerHealth: {fileID: 1083680931}
   _surikenWeapon: {fileID: 1203187969}
   _frostboltWeapon: {fileID: 165878228}
+  _trapWeapon: {fileID: 320533465}
 --- !u!114 &2009740251
 MonoBehaviour:
   m_ObjectHideFlags: 0
