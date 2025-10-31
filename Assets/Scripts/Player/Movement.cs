@@ -23,6 +23,8 @@ namespace Player
 
         [SerializeField] private ControlType currentControlType;
 
+        public Vector3 Movement => _movement;
+
         private void Start()
         {
             KeyboardControl.onClick.AddListener(EnableKeyboard);

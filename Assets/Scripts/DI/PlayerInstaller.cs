@@ -1,4 +1,5 @@
 using Player;
+using Player.Weapon.Bow;
 using Player.Weapon.Frostbolt;
 using Player.Weapon.Suriken;
 using Player.Weapon.Trap;
@@ -16,6 +17,8 @@ namespace DI
         [SerializeField] private SurikenWeapon _surikenWeapon;
         [SerializeField] private FrostboltWeapon _frostboltWeapon;
         [SerializeField] private TrapWeapon _trapWeapon;
+        [SerializeField] private BowWeapon _bowWeapon;
+
         public override void InstallBindings()
         {
             Container.Bind<PlayerMovement>().FromInstance(_playerMovement).AsSingle().NonLazy();
@@ -23,6 +26,7 @@ namespace DI
             Container.Bind<SurikenWeapon>().FromInstance(_surikenWeapon).AsSingle().NonLazy();
             Container.Bind<FrostboltWeapon>().FromInstance(_frostboltWeapon).AsSingle().NonLazy();
             Container.Bind<TrapWeapon>().FromInstance(_trapWeapon).AsSingle().NonLazy();
+            Container.Bind<BowWeapon>().FromInstance(_bowWeapon).AsSingle().NonLazy();
         }
     }
 }
