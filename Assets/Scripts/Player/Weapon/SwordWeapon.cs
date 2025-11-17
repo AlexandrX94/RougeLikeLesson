@@ -5,24 +5,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace Player.Weapon.Bow
+namespace Player.Weapon
 {
-    public class BowWeapon : BaseWeapon, IActivate
+    public class SwordWeapon : BaseWeapon, IActivate
     {
         [SerializeField] private Camera _camera;
-        [SerializeField] private Transform _container, _shootPoint, _weaponTransform;
-        [SerializeField] private ObjectPool _objectPool;
+        [SerializeField] private Transform _edgePoint, _weaponTransform;
         [SerializeField] private Animator _animator;
 
         private WaitForSeconds _timeBetweenAttack;
         private PlayerMovement _playerMovement;
-        private Coroutine _bowCoroutine;
+        private Coroutine _swordCoroutine;
         private Vector3 _direction;
         private float _duration;
         private float _speed;
         private float _damage;
 
-        public float Duration => _duration;
         public float Speed => _speed;
         public float Damage => _damage;
 
@@ -36,7 +34,6 @@ namespace Player.Weapon.Bow
             base.SetStats(value);
             _timeBetweenAttack = new WaitForSeconds(WeaponStats[CurrentLevel - 1].TimeBetweenAttack);
             _speed = WeaponStats[CurrentLevel - 1].Speed;
-            _duration = WeaponStats[WeaponStats.Count - 1].Duration;
             _damage = WeaponStats[WeaponStats.Count - 1].Damage;
         }
 
@@ -47,44 +44,21 @@ namespace Player.Weapon.Bow
             _weaponTransform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
 
-        public void ThrowArrow()
-        {
-            GameObject arrow = _objectPool.GetFromPool();
-            arrow.transform.SetParent(_container);
-            arrow.transform.position = _shootPoint.position;
-            arrow.transform.rotation = transform.rotation;
-
-
-            _animator.SetTrigger("Idle");
-        }
+        
 
         public void Activate()
         {
             SetStats(0);
-            _bowCoroutine = StartCoroutine(StartThrowArrow());
         }
 
         public void Deactivate()
         {
-            if (_bowCoroutine != null)
-            {
-                StopCoroutine(_bowCoroutine);
-            }
+            
         }
-
-        private IEnumerator StartThrowArrow()
-        {
-            while (enabled)
-            {
-                if (_playerMovement.Movement != Vector3.zero)
-                {
-                    _animator.SetTrigger("Attack");
-                }
-                
-                yield return _timeBetweenAttack;
-            }
-        }
-        [Inject] private void Construct(PlayerMovement playerMovement)
+        
+        
+        [Inject]
+        private void Construct(PlayerMovement playerMovement)
         {
             _playerMovement = playerMovement;
         }

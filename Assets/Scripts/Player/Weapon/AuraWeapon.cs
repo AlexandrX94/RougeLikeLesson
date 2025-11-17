@@ -20,11 +20,6 @@ namespace Player.Weapon
         protected override void Start()
         {
             base.Start();
-            LevelUp();
-            LevelUp();
-            LevelUp();
-            LevelUp();
-            LevelUp();
             SetStats(0);
             Activate();
         }

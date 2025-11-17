@@ -35,7 +35,21 @@ namespace Player.Weapon.Trap
                 {
                     enemy.Burn(Damage);
                 }
+
+                if(_trapWeapon.CurrentLevel >= 5)
+                {
+                    if(Random.Range(0f, 1f) <= 0.5f)
+                    {
+                        enemy.GetComponent<EnemyMovement>().FreezeEnemy();
+                    }
+                    else
+                    {
+                        enemy.GetComponent<EnemyMovement>().FrozenEnemy();
+                    }
+                }
+
                 gameObject.SetActive(false);
+
             }
         }
 

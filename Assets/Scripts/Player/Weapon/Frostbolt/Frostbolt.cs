@@ -29,10 +29,15 @@ namespace Player.Weapon.Frostbolt
             {
                 enemy.TakeDamage(Damage);
                 enemy.GetComponent<EnemyMovement>().SlowMove();
-            }
-            if(_frostboltWeapon.CurrentLevel <= 4)
-            {
                 gameObject.SetActive(false);
+                if (_frostboltWeapon.CurrentLevel >= 5)
+                {
+                    if(Random.Range(0f, 1f) <= 0.5f)
+                    {
+                        enemy.GetComponent<EnemyMovement>().FrozenEnemy();
+                    }
+                    
+                }
             }
         }
 

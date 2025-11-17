@@ -4,6 +4,7 @@ using GameCore.Pool;
 using Player.Weapon;
 using UnityEngine;
 using GameCore;
+using Enemy;
 
 namespace Player.Weapon.Frostbolt
 {
@@ -26,6 +27,12 @@ namespace Player.Weapon.Frostbolt
         private void OnEnable()
         {
             Activate();
+            LevelUp();
+            LevelUp();
+            LevelUp();
+            LevelUp();
+            LevelUp();
+            LevelUp();
         }
 
         override protected void SetStats(int value)
@@ -50,16 +57,11 @@ namespace Player.Weapon.Frostbolt
                     frozenbolt.transform.position = _shootPoints[i].position;
                     frozenbolt.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
                     
-
-                    /*var frostbolt = _objectPool.GetFromPool();
-                    frostbolt.transform.SetParent(_container);
-                    frostbolt.transform.position = _shootPoints[i].position;
-                    frostbolt.transform.rotation = _shootPoints[i].rotation;
-                    yield return _timeBetweenAttack;*/
                 }
                 yield return _timeBetweenAttack;
             }
         }
+
 
         public void Activate()
         {

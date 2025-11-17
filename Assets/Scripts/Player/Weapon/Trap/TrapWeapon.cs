@@ -17,6 +17,12 @@ namespace Player.Weapon.Trap
         private void OnEnable()
         {
             Activate();
+            LevelUp();
+            LevelUp();
+            LevelUp();
+            LevelUp();
+            LevelUp();
+            LevelUp();
         }
 
         protected override void SetStats(int value)
