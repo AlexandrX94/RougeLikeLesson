@@ -8,6 +8,7 @@ using UnityEngine;
 using Enemy;
 using System.Diagnostics;
 using Zenject;
+using GameCore.IU;
 
 namespace Enemy
 {
@@ -16,6 +17,7 @@ namespace Enemy
         [SerializeField] private WaitForSeconds _tick = new WaitForSeconds(2f);
         [SerializeField] private float _enemyDamage;
         [SerializeField] private AudioSource _audioSource;
+        [SerializeField] private DamageTextSpawner _damageTextSpawner;
 
         private IEnumerator StartBurn(float damage) 
         {
@@ -41,6 +43,7 @@ namespace Enemy
         public override void TakeDamage(float damage)
         {
             base.TakeDamage(damage);
+            _damageTextSpawner.Activate(transform, (int)damage);
             _audioSource.Play();
             if (CurrentHealth <= 0)
             {
@@ -48,7 +51,10 @@ namespace Enemy
             }
         }
 
-
+        [Inject] private void Construct(DamageTextSpawner damageTextSpawner)
+        {
+            _damageTextSpawner = damageTextSpawner;
+        }
     }
 }
 

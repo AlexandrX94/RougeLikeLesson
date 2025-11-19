@@ -10,6 +10,8 @@ namespace GameCore.Pool
         [SerializeField] private GameObject _prefab;
         private List<GameObject> _objectPool = new List<GameObject>();
         private DiContainer _diContainer;
+        private Queue<GameObject> _pool = new Queue<GameObject>();  
+        private Transform _poolParent;
 
         public GameObject Create()
         {
@@ -31,6 +33,18 @@ namespace GameCore.Pool
             newObject.SetActive(true);
             return newObject;
             
+        }
+
+        public void ReturnToPool(GameObject obj)
+        {
+            if (obj == null) return;
+
+            obj.SetActive(false);
+            obj.transform.SetParent(_poolParent);  // Вернём под родителя пула
+            obj.transform.localPosition = Vector3.zero;  // Сброс позиции (опционально)
+            obj.transform.localRotation = Quaternion.identity;  // Сброс ротации (опционально)
+
+            _pool.Enqueue(obj);
         }
 
         [Inject] private void Construct(DiContainer diContainer)

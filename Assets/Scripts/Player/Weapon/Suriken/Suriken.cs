@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using GameCore.Pool;
 using Zenject;
 
 namespace Player.Weapon.Suriken
@@ -8,17 +8,20 @@ namespace Player.Weapon.Suriken
     public class Suriken : Projectile
     {
         [SerializeField] private Transform _sprite;
-        [SerializeField] private Transform _startPoint;
-        private Rigidbody2D _rb2D;
+        private Transform _startPoint;
         private SurikenWeapon _surikenWeapon;
+        private ObjectPool _objectPool; 
         private float _returnSpeed = 3f;
-        private float _returnTimer = 3f;
+        private float _returnTimer;
+        private bool _isReturning;
+        private Vector3 _direction; 
+        private float _speed;  
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            Timer = new WaitForSeconds(_surikenWeapon.Duration);
-            Damage = _surikenWeapon._Damage;
+            Damage = _surikenWeapon._Damage;  
+            _isReturning = false;
         }
 
         private void Start()
@@ -30,20 +33,48 @@ namespace Player.Weapon.Suriken
             }
         }
 
-        private void Update()
+        public void Initialize(Vector3 direction, float speed, float duration, ObjectPool pool)
         {
-            _returnTimer -= Time.deltaTime;
-            transform.Rotate(0, 0, 500f * Time.deltaTime);
-            transform.position += _surikenWeapon.Direction * (_surikenWeapon.Speed * Time.deltaTime);
-
-            if (_returnTimer <= 0 && _surikenWeapon.CurrentLevel >= 5)
-            {
-                transform.position += (_surikenWeapon.transform.position - transform.position).normalized;
-            }
-            
+            _direction = direction;
+            _speed = speed;
+            _returnTimer = 2f;  
+            _objectPool = pool;
+            Timer = new WaitForSeconds(duration);  
         }
 
+        private void Update()
+        {
+            transform.Rotate(0, 0, 500f * Time.deltaTime);
+            if (!_isReturning)
+            {
+                transform.position += _direction * (_speed * Time.deltaTime);
+                _returnTimer -= Time.deltaTime;
+                if (_returnTimer <= 0)
+                {
+                    _isReturning = true;
+                }
+            }
+            else
+            {
+                Vector3 returnDirection = (_startPoint.position - transform.position).normalized;
+                transform.position += returnDirection * _returnSpeed * Time.deltaTime;
 
-        [Inject] private void Construct(SurikenWeapon surikenWeapon) => _surikenWeapon = surikenWeapon;
+                if (Vector3.Distance(transform.position, _startPoint.position) < 0.5f)
+                {
+                    _objectPool.ReturnToPool(gameObject);
+                }
+            }
+        }
+
+        public void StartReturn()
+        {
+            _isReturning = true;
+        }
+
+        [Inject]
+        private void Construct(SurikenWeapon surikenWeapon)
+        {
+            _surikenWeapon = surikenWeapon;
+        }
     }
 }
