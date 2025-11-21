@@ -19,10 +19,6 @@ namespace Enemy
         private Coroutine _spawnCoroutine;
         private GetRandonSpawnPoint _randomSpawnPoint;
 
-        private void Awake()
-        {
-            Activate();
-        }
 
         public void Activate()
         {

@@ -156,10 +156,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb778e0181b30564fbf81635ace854bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 100
+  _maxHealth: 10
   _currentHealth: 0
   _enemyDamage: 0
   _audioSource: {fileID: -5684802463986053879}
+  _damageTextSpawner: {fileID: 0}
 --- !u!58 &7074603823406775983
 CircleCollider2D:
   m_ObjectHideFlags: 0
